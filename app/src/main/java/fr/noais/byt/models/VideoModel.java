@@ -1,6 +1,13 @@
 package fr.noais.byt.models;
 
-public class VideoModel {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+
+@Entity(tableName = "video")
+public class VideoModel implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     private Long id;
     private String title;
     private String description;
@@ -43,8 +50,15 @@ public class VideoModel {
         return isFavorite;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     // ***** SETTERS ***** //
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setTitle(String title) {
         this.title = title;
