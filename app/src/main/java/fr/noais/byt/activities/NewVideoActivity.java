@@ -6,14 +6,17 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import fr.noais.byt.R;
+import fr.noais.byt.models.Category;
 import fr.noais.byt.models.VideoModel;
 
 public class NewVideoActivity extends AppCompatActivity {
@@ -27,9 +30,12 @@ public class NewVideoActivity extends AppCompatActivity {
         EditText description = findViewById(R.id.descriptionTxa);
         EditText url = findViewById(R.id.urlTxt);
         Switch isFavorite = findViewById(R.id.favoriteSwt);
+        Spinner category = findViewById(R.id.categorySpn);
 
         ImageButton saveBtn = findViewById(R.id.addBtn);
         ImageButton cancelBtn = findViewById(R.id.cancelBtn);
+
+        category.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Category.getNames()));
 
         for (EditText editText : new EditText[]{title, description, url}) {
             editText.setOnFocusChangeListener((v, hasFocus) -> {
@@ -70,6 +76,8 @@ public class NewVideoActivity extends AppCompatActivity {
             videoModel.setDescription(description.getText().toString());
             videoModel.setUrl(url.getText().toString());
             videoModel.setFavorite(isFavorite.isChecked());
+            videoModel.setCategory(Category.fromName(category.getSelectedItem().toString()));
+
 
             Intent intent = new Intent();
             intent.putExtra("video", videoModel);

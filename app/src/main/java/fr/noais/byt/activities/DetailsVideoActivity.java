@@ -32,7 +32,7 @@ public class DetailsVideoActivity extends AppCompatActivity {
 
         if (video != null) {
             // ...
-            tvTitle.setText(video.getTitle());
+            tvTitle.setText(String.format("%s (%s)", video.getTitle(), video.getCategory().name()));
             tvDescription.setText(video.getDescription());
             tvUrl.setText(video.getUrl());
             // ...

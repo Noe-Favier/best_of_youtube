@@ -152,8 +152,24 @@
         android:id="@+id/favoriteSwt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Fav ?"
+        app:layout_constraintStart_toStartOf="@+id/urlTxt"
+        app:layout_constraintTop_toBottomOf="@+id/categorySpn" />
+
+    <Spinner
+        android:id="@+id/categorySpn"
+        android:layout_width="324dp"
+        android:layout_height="36dp"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Category"
         app:layout_constraintStart_toStartOf="@+id/urlTxt"
         app:layout_constraintTop_toBottomOf="@+id/urlTxt" />
 </androidx.constraintlayout.widget.ConstraintLayout>
