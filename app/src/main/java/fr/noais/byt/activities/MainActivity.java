@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //------
         Button addVideoBtn = findViewById(R.id.addVideoBtn);
+        Switch favoriteSwitch = findViewById(R.id.mainFavoriteSwitch);
         //------
         ActivityResultLauncher<Intent> newVideoLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -63,6 +65,36 @@ public class MainActivity extends AppCompatActivity {
 
         addVideoBtn.setOnClickListener(v -> {
             newVideoLauncher.launch(new Intent(MainActivity.this, NewVideoActivity.class));
+        });
+
+        favoriteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                CompletableFuture.runAsync(() -> {
+                    List<VideoModel> vl = VideoDatabase.getDb(getApplicationContext()).videoDao().list();
+                    List<VideoModel> fav = new ArrayList<>();
+                    for (VideoModel v : vl) {
+                        if (v.isFavorite()) {
+                            fav.add(v);
+                        }
+                    }
+                    runOnUiThread(() -> {
+                        RecyclerView rvVideoList = findViewById(R.id.videoList);
+                        TextView noContent = findViewById(R.id.noContentTextView);
+                        if (fav.isEmpty()) {
+                            rvVideoList.setVisibility(RecyclerView.GONE);
+                            noContent.setVisibility(TextView.VISIBLE);
+                        } else {
+                            noContent.setVisibility(TextView.GONE);
+                            rvVideoList.setVisibility(RecyclerView.VISIBLE);
+
+                            rvVideoList.setAdapter(new VideoAdapter(fav));
+                            rvVideoList.setLayoutManager(new LinearLayoutManager(this));
+                        }
+                    });
+                });
+            } else {
+                refreshVideoList();
+            }
         });
 
         refreshVideoList();
