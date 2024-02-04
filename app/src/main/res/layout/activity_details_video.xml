@@ -6,4 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".activities.DetailsVideoActivity">
 
+    <ImageButton
+        android:id="@+id/descrCancelBtn"
+        android:layout_width="80dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+
+    <TextView
+        android:id="@+id/descrTitleTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/convergence"
+        android:text="title"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/descrCancelBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/descrCancelBtn"
+        app:layout_constraintTop_toTopOf="@+id/descrCancelBtn" />
+
+    <TextView
+        android:id="@+id/descrDescriptionTxt"
+        android:layout_width="0dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/convergence"
+        android:text="description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/descrCancelBtn"
+        app:layout_constraintTop_toBottomOf="@+id/descrCancelBtn" />
+
+    <TextView
+        android:id="@+id/descrUrlTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/convergence"
+        android:text="url"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/descrCancelBtn"
+        app:layout_constraintTop_toBottomOf="@+id/descrDescriptionTxt"
+        app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

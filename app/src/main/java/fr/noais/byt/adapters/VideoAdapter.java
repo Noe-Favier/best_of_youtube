@@ -17,6 +17,7 @@ import androidx.annotation.*;
 import java.util.List;
 
 import fr.noais.byt.R;
+import fr.noais.byt.activities.DetailsVideoActivity;
 import fr.noais.byt.database.VideoDatabase;
 import fr.noais.byt.models.VideoModel;
 
@@ -51,6 +52,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
         holder.btnDetails.setOnClickListener(v1 -> {
             // ...
+            Intent intent = new Intent(v1.getContext(), DetailsVideoActivity.class);
+            intent.putExtra("video", v);
+            startActivity(v1.getContext(), intent, null);
         });
 
         holder.btnPlay.setOnClickListener(v1 -> {
