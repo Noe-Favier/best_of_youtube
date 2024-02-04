@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        //------
+        Button addVideoBtn = findViewById(R.id.addVideoBtn);
         //------
         ActivityResultLauncher<Intent> newVideoLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                             VideoDatabase.getDb(getApplicationContext()).videoDao().add(video);
                         }).thenRun(() -> {
                             Snackbar.make(findViewById(R.id.addVideoBtn), "Video added", Snackbar.LENGTH_SHORT).show();
+                            refreshVideoList();
                         }).exceptionally(e -> {
                             Log.e("MainActivity", "Error adding video", e);
                             Snackbar.make(findViewById(R.id.addVideoBtn), "Error adding video", Snackbar.LENGTH_SHORT).show();
@@ -55,23 +60,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         //------
-        setContentView(R.layout.activity_main);
 
-        //
-        Button addVideoBtn = findViewById(R.id.addVideoBtn);
-        RecyclerView rvVideoList = findViewById(R.id.videoList);
-        TextView noContent = findViewById(R.id.noContentTextView);
-        //
         addVideoBtn.setOnClickListener(v -> {
             newVideoLauncher.launch(new Intent(MainActivity.this, NewVideoActivity.class));
         });
 
-        Future<List<VideoModel>> future = executor.submit(() -> VideoDatabase.getDb(getApplicationContext()).videoDao().list());
-        try {
-            List<VideoModel> vl = future.get();
+        refreshVideoList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
+    }
+
+    protected void refreshVideoList() {
+        CompletableFuture.runAsync(() -> {
+            List<VideoModel> vl = VideoDatabase.getDb(getApplicationContext()).videoDao().list();
             runOnUiThread(() -> {
+                RecyclerView rvVideoList = findViewById(R.id.videoList);
+                TextView noContent = findViewById(R.id.noContentTextView);
                 if (vl.isEmpty()) {
-                    //log that there is no content
                     rvVideoList.setVisibility(RecyclerView.GONE);
                     noContent.setVisibility(TextView.VISIBLE);
                 } else {
@@ -82,14 +91,6 @@ public class MainActivity extends AppCompatActivity {
                     rvVideoList.setLayoutManager(new LinearLayoutManager(this));
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        executor.shutdown();
+        });
     }
 }
